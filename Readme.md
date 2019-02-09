@@ -9,3 +9,9 @@ sudo make install
 snake
 sudo make uninstall
 ```
+
+or
+
+```
+python3 snake.py
+```

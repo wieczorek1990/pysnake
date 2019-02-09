@@ -71,9 +71,9 @@ class Food {
 public:
   pair<int, int> point;
   Food() {
-    this->next();
+    this->appear();
   }
-  void next() {
+  void appear() {
     this->point = make_pair(
       rand() % Y_MAX,
       rand() % X_MAX
@@ -122,7 +122,7 @@ int main() {
 
     if (snake.head() == food.point) {
       snake.eat(food.point);
-      food.next();
+      food.appear();
     }
 
     wclear(win);
