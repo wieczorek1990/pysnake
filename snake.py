@@ -24,11 +24,8 @@ class Snake:
         return self.parts[0]
 
     def move(self, x, y):
-        last = self.parts.pop()
-        if len(self.parts) > 0:
-            front = self.head()
-        else:
-            front = last
+        front = self.head()
+        self.parts.pop()
         self.parts.extendleft([(x + front[0], y + front[1])])
 
     def eat(self, food):
@@ -80,7 +77,7 @@ class Food:
                          random.randint(0, BOARD_SIZE[1] - 1)
 
     def __contains__(self, snake):
-        return any([item == (self.x, self.y) for item in snake.parts])
+        return any([part == (self.x, self.y) for part in snake.parts])
 
 
 def draw_snake(surface, snake):
@@ -123,13 +120,12 @@ def main():
             elif e.type == KEYDOWN:
                 if e.key == K_UP:
                     snake.up()
-                if e.key == K_DOWN:
+                elif e.key == K_DOWN:
                     snake.down()
-                if e.key == K_LEFT:
+                elif e.key == K_LEFT:
                     snake.left()
-                if e.key == K_RIGHT:
+                elif e.key == K_RIGHT:
                     snake.right()
-        screen.fill(WHITE)
         if snake.collision():
             break
         if snake in food:
@@ -137,6 +133,7 @@ def main():
             highscore += 1
             food.appear()
         snake.move(snake.last_move[0], snake.last_move[1])
+        screen.fill(WHITE)
         draw_snake(screen, snake)
         draw_food(screen, food)
         draw_highscore(screen, font, highscore)
