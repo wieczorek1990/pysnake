@@ -13,57 +13,68 @@ public:
   deque<pair<int, int>> parts;
   pair<int, int> last_move;
   Snake() {
-    this->parts.push_back(make_pair(Y_MAX / 2, X_MAX / 2));
-    this->down();
+    parts.push_back(make_pair(Y_MAX / 2, X_MAX / 2));
+    last_move = make_pair(0, 0);
+    down();
   }
   void up() {
-    move(0, -1);
-    last_move = make_pair(0, -1);
+    if (!forbidden_move(0, -1)) {
+      move(0, -1);
+      last_move = make_pair(0, -1);
+    }
   }
   void down() {
-    move(0, 1);
-    last_move = make_pair(0, 1);
+    if (!forbidden_move(0, 1)) {
+      move(0, 1);
+      last_move = make_pair(0, 1);
+    }
   }
   void left() {
-    move(-1, 0);
-    last_move = make_pair(-1, 0);
+    if (!forbidden_move(-1, 0)) {
+      move(-1, 0);
+      last_move = make_pair(-1, 0);
+    }
   }
   void right() {
-    move(1, 0);
-    last_move = make_pair(1, 0);
+    if (!forbidden_move(1, 0)) {
+      move(1, 0);
+      last_move = make_pair(1, 0);
+    }
   }
   void move(int x, int y) {
-    this->parts.pop_back();
-    pair<int, int> front = this->parts.front();
-    this->parts.push_front(make_pair(y + front.first,
-                                     x + front.second));
+    parts.pop_back();
+    pair<int, int> front = parts.front();
+    parts.push_front(make_pair(y + front.first,
+                               x + front.second));
   }
   void move() {
-    this->move(this->last_move.first, this->last_move.second);
+    move(last_move.first, last_move.second);
   }
   pair<int, int> head() {
-    return this->parts.front();
+    return parts.front();
   }
   void eat(pair<int, int> point) {
-    this->parts.push_front(point);
+    parts.push_front(point);
   }
   bool collision() {
-    pair<int, int> point = this->head();
+    pair<int, int> point = head();
     if (point.first < 0 || point.first > Y_MAX - 1) {
       return true;
     } else if (point.second < 0 || point.second > X_MAX - 1) {
       return true;
     }
-    for (int i = 0; i < this->parts.size(); ++i) {
+    for (int i = 0; i < parts.size(); ++i) {
       if (i == 0) {
         continue;
       }
-      pair<int, int> head = this->head();
-      if (this->parts.at(i) == head) {
+      if (parts.at(i) == point) {
         return true;
       }
     }
     return false;
+  }
+  bool forbidden_move(int x, int y) {
+    return last_move.first == -x && last_move.second == -y;
   }
 };
 
@@ -71,10 +82,10 @@ class Food {
 public:
   pair<int, int> point;
   Food() {
-    this->appear();
+    appear();
   }
   void appear() {
-    this->point = make_pair(
+    point = make_pair(
       rand() % Y_MAX,
       rand() % X_MAX
     );

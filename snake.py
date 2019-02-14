@@ -17,6 +17,7 @@ class Snake:
     def __init__(self):
         self.parts = deque([(BOARD_SIZE[0] // 2,
                              BOARD_SIZE[1] // 2)])
+        self.last_move = (0, 0)
         self.down()
 
     def head(self):
@@ -33,21 +34,28 @@ class Snake:
     def eat(self, food):
         self.parts.extendleft([(food.x, food.y)])
 
+    def forbidden_move(self, x, y):
+      return self.last_move[0] == -x and self.last_move[1] == -y
+
     def up(self):
-        self.move(0, -1)
-        self.last_move = (0, -1)
+        if not self.forbidden_move(0, -1):
+          self.move(0, -1)
+          self.last_move = (0, -1)
 
     def down(self):
-        self.move(0, 1)
-        self.last_move = (0, 1)
+        if not self.forbidden_move(0, 1):
+          self.move(0, 1)
+          self.last_move = (0, 1)
 
     def left(self):
-        self.move(-1, 0)
-        self.last_move = (-1, 0)
+        if not self.forbidden_move(-1, 0):
+          self.move(-1, 0)
+          self.last_move = (-1, 0)
 
     def right(self):
-        self.move(1, 0)
-        self.last_move = (1, 0)
+        if not self.forbidden_move(1, 0):
+          self.move(1, 0)
+          self.last_move = (1, 0)
 
     def collision(self):
         point = self.head()
