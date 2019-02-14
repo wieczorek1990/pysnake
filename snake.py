@@ -4,11 +4,14 @@ from collections import deque
 from pygame.locals import *
 
 
-WINSIZE = [640, 480]
+WIN_SIZE = [640, 480]
 SIZE = 20
-BOARD_SIZE = [WINSIZE[0] // SIZE, WINSIZE[1] // SIZE]
+BOARD_SIZE = [WIN_SIZE[0] // SIZE, WIN_SIZE[1] // SIZE]
 BLACK = 0, 0, 0
 WHITE = 255, 255, 255
+RED = 255, 0, 0
+FONT_SIZE = 32
+
 
 class Snake:
     def __init__(self):
@@ -48,9 +51,9 @@ class Snake:
 
     def collision(self):
         point = self.head()
-        if point[0] < 1 or point[0] > BOARD_SIZE[0] - 2:
+        if point[0] < 0 or point[0] > BOARD_SIZE[0] - 1:
             return True
-        elif point[1] < 1 or point[1] > BOARD_SIZE[1] - 2:
+        elif point[1] < 0 or point[1] > BOARD_SIZE[1] - 1:
             return True
         for i in range(len(self.parts)):
             if i == 0:
@@ -85,15 +88,24 @@ def draw_food(surface, food):
             surface.set_at((x, y), BLACK)
 
 
+def draw_highscore(surface, font, highscore):
+  string = str(highscore)
+  label = font.render(string, 1, RED)
+  surface.blit(label, (WIN_SIZE[0] - label.get_width(), 0))
+
+
 def main():
     random.seed()
     snake = Snake()
     food = Food()
+    highscore = 0
     clock = pygame.time.Clock()
 
     pygame.init()
-    screen = pygame.display.set_mode(WINSIZE)
+    screen = pygame.display.set_mode(WIN_SIZE)
     pygame.display.set_caption('Snake')
+    pygame.font.init()
+    font = pygame.font.SysFont("monospace", FONT_SIZE)
 
     done = 0
     while not done:
@@ -114,12 +126,14 @@ def main():
             break
         if snake in food:
             snake.eat(food)
+            highscore += 1
             food.appear()
         snake.move(snake.last_move[0], snake.last_move[1])
         draw_snake(screen, snake)
         draw_food(screen, food)
+        draw_highscore(screen, font, highscore)
         pygame.display.update()
-        clock.tick(10)
+        clock.tick(8)
 
 
 if __name__ == '__main__':
