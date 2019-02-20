@@ -6,7 +6,7 @@ Snake game inspired by Nokia software.
 Requirements:
 
 ```
-sudo apt-get install libncurses5-dev libncursesw5-dev python-dev python3-pip
+sudo apt-get install libncurses5-dev libncursesw5-dev python-dev ruby-dev python3-pip
 sudo pip3 install pygame
 sudo gem install curses
 ```
@@ -22,4 +22,10 @@ or
 
 ```
 python3 snake.py
+```
+
+or
+
+```
+ruby snake.rb
 ```
